@@ -4,7 +4,7 @@ import pygame as pg
 from .states import classic, menu, mode, options, controls, audio, ghost, splash, keybinding, getkey
 
 class Control():
-    def __init__(self, fullscreen, difficulty, size):
+    def __init__(self, fullscreen, difficulty, size, knob):
         pg.mixer.pre_init(44100, -16, 1, 512)
         pg.init()
         pg.display.set_caption("Pong")
@@ -18,12 +18,12 @@ class Control():
             self.screen = pg.display.set_mode(self.screensize)
         self.screen_rect = self.screen.get_rect()
         self.clock = pg.time.Clock()
-        self.fps = 60
+        self.fps = 30
         self.keys = pg.key.get_pressed()
         self.done = False
         self.state_dict = {
             "MENU"     : menu.Menu(self.screen_rect),
-            "CLASSIC"  : classic.Classic(self.screen_rect, difficulty),
+            "CLASSIC"  : classic.Classic(self.screen_rect, difficulty, knob),
             "CONTROLS" : controls.Controls(self.screen_rect),
             "MODE"     : mode.Mode(self.screen_rect),
             "OPTIONS"  : options.Options(self.screen_rect),
@@ -65,5 +65,6 @@ class Control():
             self.state.render(self.screen)
             pg.display.update()
             self.clock.tick(self.fps)
-
+        pygame.display.quit()
+        pygame.quit()
 

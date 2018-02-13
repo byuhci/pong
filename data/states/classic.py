@@ -7,8 +7,9 @@ from .. import AI
 import random
 
 class Classic(tools.States):
-    def __init__(self, screen_rect, difficulty): 
+    def __init__(self, screen_rect, difficulty, knob=None): 
         tools.States.__init__(self)
+        self.knob = knob
         self.screen_rect = screen_rect
         self.score_text, self.score_rect = self.make_text("SCOREBOARD_PLACEHOLDER",
             (255,255,255), (screen_rect.centerx,100), 50)
@@ -63,13 +64,8 @@ class Classic(tools.States):
         if self.ai.move_down:
             self.paddle_left.move(0, 1)
             
-        #temp fix for keys until prefecting key bindings
-        #if keys[self.controller_dict['up']]:
-        if keys[pg.K_UP] or keys[pg.K_w]:
-            self.paddle_right.move(0, -1)
-        #if keys[self.controller_dict['down']]:
-        if keys[pg.K_DOWN] or keys[pg.K_s]:
-            self.paddle_right.move(0, 1)
+        # CHANGES for knob control
+        self.paddle_right.move(0, self.knob.get_delta())
         
     def update(self, now, keys):
         if not self.pause:
