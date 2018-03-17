@@ -65,6 +65,6 @@ class Control():
             self.state.render(self.screen)
             pg.display.update()
             self.clock.tick(self.fps)
-        pygame.display.quit()
-        pygame.quit()
+        pg.display.quit()
+        pg.quit()
 
