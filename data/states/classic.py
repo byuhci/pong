@@ -7,9 +7,9 @@ from .. import AI
 import random
 
 class Classic(tools.States):
-    def __init__(self, screen_rect, difficulty, knob=None): 
+    def __init__(self, screen_rect, difficulty, hid=None): 
         tools.States.__init__(self)
-        self.knob = knob
+        self.hid = hid
         self.screen_rect = screen_rect
         self.score_text, self.score_rect = self.make_text("SCOREBOARD_PLACEHOLDER",
             (255,255,255), (screen_rect.centerx,100), 50)
@@ -59,13 +59,14 @@ class Classic(tools.States):
             pg.mixer.music.play()
                     
     def movement(self, keys):
-        if self.ai.move_up:
-            self.paddle_left.move(0, -1)
-        if self.ai.move_down:
-            self.paddle_left.move(0, 1)
-            
-        # CHANGES for knob control
-        self.paddle_right.move(0, self.knob.get_delta())
+        # CHANGES for hid control
+        # if self.ai.move_up:
+        #     self.paddle_left.move(0, -1)
+        # if self.ai.move_down:
+        #     self.paddle_left.move(0, 1)
+
+        self.paddle_left.move(0, self.hid.get_knob_delta())
+        self.paddle_right.move(0, self.hid.get_slider_delta())
         
     def update(self, now, keys):
         if not self.pause:
@@ -83,6 +84,8 @@ class Classic(tools.States):
                 (255,255,255), self.screen_rect.center, 50)
         pg.mouse.set_visible(False)
         self.ai.reset()
+        if self.hid.get_button_pressed():
+            self.reset()
 
     def render(self, screen):
         screen.fill(self.bg_color)
