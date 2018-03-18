@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import time
 import serial
 from threading import Thread
 from data.control import Control  # pong game
@@ -12,12 +11,13 @@ class BigKnob:
         self.port = serial.Serial(port=port)
 
         self.running = True
-        self.thread = Thread(target=self.receiving).start()
+        self.thread = Thread(target=self.receiving)
+        self.thread.start()
         
         self.knob_angle = 0
         self.knob_old_angle = 0
         self.slider_pos = 0
-        self.solder_old_pos = 0
+        self.slider_old_pos = 0
         self.button_pressed = False
 
     def stop(self):
@@ -37,6 +37,8 @@ class BigKnob:
         return self.button_pressed
         
     def receiving(self):
+        import time
+
         buf = ''
         while not self.port.isOpen():
             time.sleep(0.5)
@@ -59,7 +61,7 @@ def main(*args):
     hid = BigKnob(args[1])
     Control(False, 'hard', (800, 600), hid).run()
     hid.thread.join()
-    
+
     print('Goodbye')
 
 

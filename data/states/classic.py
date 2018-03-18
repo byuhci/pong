@@ -48,8 +48,6 @@ class Classic(tools.States):
     def get_event(self, event, keys):
         if event.type == pg.QUIT:
             self.quit = True
-            # CHANGED FOR HID CONTROL
-            self.hid.stop()
         elif event.type == pg.KEYDOWN:
             if event.key == self.controller_dict['back']:
                 # self.button_sound.sound.play()
