@@ -10,13 +10,19 @@ class BigKnob:
 
     def __init__(self, port):
         self.port = serial.Serial(port=port)
+
+        self.running = True
         self.thread = Thread(target=self.receiving).start()
+        
         self.knob_angle = 0
         self.knob_old_angle = 0
         self.slider_pos = 0
         self.solder_old_pos = 0
         self.button_pressed = False
 
+    def stop(self):
+        self.running = False
+        
     def get_knob_delta(self):
         ret = self.knob_angle - self.knob_old_angle
         self.knob_old_angle = self.knob_angle
@@ -34,25 +40,25 @@ class BigKnob:
         buf = ''
         while not self.port.isOpen():
             time.sleep(0.5)
-        while True:
+        while self.running:
+            time.sleep(0.05)
             buf += self.port.read(self.port.inWaiting()).decode()
             if '\n' in buf:
                 lines = buf.split('\n')
                 last = lines[-2].split()
                 buf = lines[-1]
-                print(self.last)
+                print(last)
                 self.knob_angle = last[0]
                 self.slider_pos = last[1]
                 self.button_pressed = True if last[2] == '1' else False
+        self.port.close()
                 
                 
 def main(*args):
 
-    try: 
-        hid = BigKnob(args[1])
-        Control(False, 'hard', (800, 600), hid).run()
-    finally:
-        hid.close()
+    hid = BigKnob(args[1])
+    Control(False, 'hard', (800, 600), hid).run()
+    hid.thread.join()
     
     print('Goodbye')
 
