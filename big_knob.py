@@ -47,7 +47,7 @@ class BigKnob:
                 lines = buf.split('\n')
                 last = lines[-2].split()
                 buf = lines[-1]
-                print(last)
+                print(', '.join(last))
                 self.knob_angle = last[0]
                 self.slider_pos = last[1]
                 self.button_pressed = True if last[2] == '1' else False

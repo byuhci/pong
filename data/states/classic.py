@@ -3,7 +3,7 @@ import pygame as pg
 from .. import ball as ball_
 from .. import paddle
 from .. import tools
-from .. import AI
+# from .. import AI
 
 
 class Classic(tools.States):
@@ -38,7 +38,7 @@ class Classic(tools.States):
         self.paddle_right = paddle.Paddle(pad_right, paddle_y, paddle_width,
                                           paddle_height, (150, 150, 150))
         
-        self.ai = AI.AIPaddle(self.screen_rect, self.ball.rect, difficulty)
+        # self.ai = AI.AIPaddle(self.screen_rect, self.ball.rect, difficulty)
         
     def reset(self):
         self.pause = False
@@ -78,7 +78,7 @@ class Classic(tools.States):
         
     def update(self, now, keys):
         if not self.pause:
-            self.ai.update(self.ball.rect, self.ball, self.paddle_left.rect)
+            # self.ai.update(self.ball.rect, self.ball, self.paddle_left.rect)
             self.score_text, self.score_rect = self.make_text(
                 '{}:{}'.format(self.score[0], self.score[1]),
                 (255, 255, 255), (self.screen_rect.centerx, 25), 50)
@@ -93,7 +93,7 @@ class Classic(tools.States):
             self.pause_text, self.pause_rect = self.make_text(
                 "PAUSED", (255, 255, 255), self.screen_rect.center, 50)
         pg.mouse.set_visible(False)
-        self.ai.reset()
+        # self.ai.reset()
 
         # CHANGES FOR HID CONTROL
         if self.hid.get_button_pressed():
