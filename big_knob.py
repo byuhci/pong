@@ -40,6 +40,7 @@ class BigKnob:
         import time
 
         buf = ''
+        old = ''
         while not self.port.isOpen():
             time.sleep(0.5)
         while self.running:
@@ -49,7 +50,9 @@ class BigKnob:
                 lines = buf.split('\n')
                 last = lines[-2].split()
                 buf = lines[-1]
-                print(', '.join(last))
+                if not last == old:
+                    print(', '.join(last))
+                    old = last
                 self.knob_angle = int(last[0])
                 self.slider_pos = int(last[1])
                 self.button_pressed = True if last[2] == '1' else False
